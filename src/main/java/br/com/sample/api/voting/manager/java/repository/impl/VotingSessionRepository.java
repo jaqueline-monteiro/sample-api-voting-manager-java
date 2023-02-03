@@ -24,7 +24,7 @@ public class VotingSessionRepository implements IVotingSessionRepository {
     private static final String INSERT = "INSERT INTO VOTING_SYSTEM.VOTING_SESSION (ID,SCHEDULE_ID,START_TIME,END_TIME,USER_INCL,HOR_INCL) "
             + "VALUES (VOTING_SYSTEM.VOTING_SESSION_SEQ.NEXTVAL,:scheduleId,:startTime,:endTime,'Processo API',SYSTIMESTAMP)";
 
-    private static final String FIND_BY_ID = "SELECT ID,SCHEDULE_ID,START_TIME,END_TIME FROM SCHEDULE WHERE ID = :id";
+    private static final String FIND_BY_ID = "SELECT ID,SCHEDULE_ID,START_TIME,END_TIME FROM VOTING_SYSTEM.VOTING_SESSION WHERE ID = :id";
 
     @Override
     public void save(Long scheduleId, VotingSession votingSession) {

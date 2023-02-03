@@ -26,7 +26,7 @@ public class ScheduleRepositoryImpl implements IScheduleRepository {
     private static final String INSERT = "INSERT INTO VOTING_SYSTEM.SCHEDULE (ID,TITLE,DESCRIPTION,USER_INCL,HOR_INCL) "
             + "VALUES (VOTING_SYSTEM.SCHEDULE_SEQ.NEXTVAL,:title,:description,'Processo API',SYSTIMESTAMP)";
 
-    private static final String FIND_BY_ID = "SELECT ID,TITLE,DESCRIPTION FROM SCHEDULE WHERE ID = :id";
+    private static final String FIND_BY_ID = "SELECT ID,TITLE,DESCRIPTION FROM VOTING_SYSTEM.SCHEDULE WHERE ID = :id";
 
     @Override
     public Schedule save(Schedule schedule) {

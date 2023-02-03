@@ -18,7 +18,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.sample.api.voting.manager.java.model.ErrorDTO;
 import br.com.sample.api.voting.manager.java.model.Schedule;
+import br.com.sample.api.voting.manager.java.model.Vote;
 import br.com.sample.api.voting.manager.java.service.IScheduleService;
+import br.com.sample.api.voting.manager.java.service.IVoteService;
 import br.com.sample.api.voting.manager.java.service.IVotingSessionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +38,9 @@ public class ScheduleController {
     
     @Autowired
     private IVotingSessionService votingSessionService;
+    
+    @Autowired
+    private IVoteService voteService;
 
     @ApiOperation(value = "Endpoint to register a new schedule")
     @ApiResponses({
@@ -48,7 +53,7 @@ public class ScheduleController {
     })
     @PostMapping("/schedules")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Schedule> createSchedule(@RequestBody @Valid Schedule schedule) {
+    public ResponseEntity<Schedule> createSchedule(@RequestBody @Valid Schedule schedule) {        
         Schedule created = scheduleService.createSchedule(schedule);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -61,7 +66,7 @@ public class ScheduleController {
 
     @ApiOperation(value = "Endpoint to open a voting session in a schedule")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Created", response = ErrorDTO.class),
+            @ApiResponse(code = 200, message = "Ok", response = ErrorDTO.class),
             @ApiResponse(code = 400, message = "Bad Request", response = ErrorDTO.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = ErrorDTO.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ErrorDTO.class),
@@ -72,10 +77,32 @@ public class ScheduleController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> openVotingSession(
             @ApiParam(value = "Schedule ID to open a voting session", required = true) @PathVariable Long id,
-            @ApiParam(value = "Duration of the voting session", required = false) @RequestParam(required = false) Long duration) {
+            @ApiParam(value = "Duration of the voting session", required = false) @RequestParam(required = false) Long duration) { 
+        
         votingSessionService.openVotingSession(id, duration);
 
         return new ResponseEntity<>("Voting session opened for schedule with id " + id, HttpStatus.OK);
+    }
+    
+    @ApiOperation(value = "Endpoint to receive votes from members")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Created", response = ErrorDTO.class),
+            @ApiResponse(code = 400, message = "Bad Request", response = ErrorDTO.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = ErrorDTO.class),
+            @ApiResponse(code = 403, message = "Forbidden", response = ErrorDTO.class),
+            @ApiResponse(code = 404, message = "Not Found", response = ErrorDTO.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = ErrorDTO.class)
+    })
+    @PostMapping("/schedules/{id}/voting-session/{id}/vote")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> vote(
+            @ApiParam(value = "Schedule ID to open a voting session", required = true) @PathVariable Long scheduleId,
+            @ApiParam(value = "VotingSession ID to register a vote in a schedule", required = true) @PathVariable Long sessionId,
+            @ApiParam(value = "Member informations required to vote", required = false) @RequestBody(required = true) @Valid Vote vote) {
+        
+        voteService.vote(scheduleId, sessionId, vote);
+
+        return new ResponseEntity<>("Vote registered successfully!", HttpStatus.OK);
     }
 
 }

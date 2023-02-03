@@ -46,14 +46,16 @@ When we talk about API versioning, there are three possible ways to create a pro
 
 URL or by path (URI) is the model we use by default in this project, as it is much clearer and simpler for the user to know which API he is accessing and extremely easy to implement.
 
-# Tecnologies
+# Technologies
 
 - Java 17
 - Spring Boot 2.6.9
+- Spring MVC
 - API REST	
 - Maven
 - Swagger 2
 - H2 Database
+- JDBC Template
 - JUnit 5
 - Mockito
 - K6 performance test
