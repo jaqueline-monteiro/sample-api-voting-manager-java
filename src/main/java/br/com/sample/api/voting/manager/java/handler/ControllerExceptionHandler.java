@@ -63,7 +63,7 @@ public class ControllerExceptionHandler {
         
         ErrorDTO apiError = ErrorDTO.builder()
                 .error("Validation Error")
-                .message(exception.getMessage())
+                .message(exception.getBindingResult().getFieldErrors().get(0).getDefaultMessage())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .build();
 

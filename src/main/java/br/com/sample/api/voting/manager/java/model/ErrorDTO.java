@@ -28,7 +28,7 @@ public class ErrorDTO {
     @Builder
     private ErrorDTO(
             @NonNull String error,
-            @NonNull String message,
+            String message,
             @NonNull Integer status) {
 
         this.error = error;

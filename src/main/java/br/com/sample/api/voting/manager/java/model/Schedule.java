@@ -16,11 +16,11 @@ public class Schedule implements Serializable {
     @ApiModelProperty(hidden = true)
     private Long id;
 
-    @NotBlank(message = "Field must not be null or blank.")
+    @NotBlank(message = "Field TITLE must not be null or blank.")
     @ApiModelProperty(value = "Title of the schedule", required = true, example = "Board meeting")
     private String title;
 
-    @NotBlank(message = "Field must not be null or blank.")
+    @NotBlank(message = "Field DESCRIPTION must not be null or blank.")
     @ApiModelProperty(value = "Description of the schedule", required = true, example = "Discussion of budget")
     private String description;
 
