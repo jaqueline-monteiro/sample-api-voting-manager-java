@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 
+import br.com.sample.api.voting.manager.java.exceptions.ApiException;
 import br.com.sample.api.voting.manager.java.model.VotingSession;
 import br.com.sample.api.voting.manager.java.repository.IVotingSessionRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,8 @@ public class VotingSessionRepository implements IVotingSessionRepository {
             log.info("Done!");
         } catch (Exception exception) {
             log.error("Failed saving! {}", exception.getMessage());
+            
+            throw new ApiException(exception, "Failed to persist a VotingSession with scheduleId: %s", scheduleId);
         }
     }
 

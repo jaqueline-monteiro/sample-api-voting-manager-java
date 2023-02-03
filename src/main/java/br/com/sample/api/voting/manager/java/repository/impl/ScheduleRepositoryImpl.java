@@ -11,6 +11,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import br.com.sample.api.voting.manager.java.exceptions.ApiException;
 import br.com.sample.api.voting.manager.java.model.Schedule;
 import br.com.sample.api.voting.manager.java.repository.IScheduleRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class ScheduleRepositoryImpl implements IScheduleRepository {
     @Override
     public Schedule save(Schedule schedule) {
         try {
-            log.info("Saving Schedule with id {}", schedule.getId());
+            log.info("Saving Schedule: {} - {}", schedule.getTitle(), schedule.getDescription());
 
             KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -53,7 +54,7 @@ public class ScheduleRepositoryImpl implements IScheduleRepository {
         } catch (Exception exception) {
             log.error("Failed saving! {}", exception.getMessage());
 
-            return null;
+            throw new ApiException(exception, "Failed to persist schedule: %s - %s", schedule.getTitle(), schedule.getDescription());
         }
     }
 

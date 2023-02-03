@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.sample.api.voting.manager.java.model.ErrorResponse;
+import br.com.sample.api.voting.manager.java.model.ErrorDTO;
 import br.com.sample.api.voting.manager.java.model.Schedule;
 import br.com.sample.api.voting.manager.java.service.IScheduleService;
 import br.com.sample.api.voting.manager.java.service.IVotingSessionService;
@@ -39,12 +39,12 @@ public class ScheduleController {
 
     @ApiOperation(value = "Endpoint to register a new schedule")
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Created", response = ErrorResponse.class),
-            @ApiResponse(code = 400, message = "Bad Request", response = ErrorResponse.class),
-            @ApiResponse(code = 401, message = "Unauthorized", response = ErrorResponse.class),
-            @ApiResponse(code = 403, message = "Forbidden", response = ErrorResponse.class),
-            @ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = ErrorResponse.class)
+            @ApiResponse(code = 201, message = "Created", response = ErrorDTO.class),
+            @ApiResponse(code = 400, message = "Bad Request", response = ErrorDTO.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = ErrorDTO.class),
+            @ApiResponse(code = 403, message = "Forbidden", response = ErrorDTO.class),
+            @ApiResponse(code = 404, message = "Not Found", response = ErrorDTO.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = ErrorDTO.class)
     })
     @PostMapping("/schedules")
     @ResponseStatus(HttpStatus.CREATED)
@@ -61,12 +61,12 @@ public class ScheduleController {
 
     @ApiOperation(value = "Endpoint to open a voting session in a schedule")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Created", response = ErrorResponse.class),
-            @ApiResponse(code = 400, message = "Bad Request", response = ErrorResponse.class),
-            @ApiResponse(code = 401, message = "Unauthorized", response = ErrorResponse.class),
-            @ApiResponse(code = 403, message = "Forbidden", response = ErrorResponse.class),
-            @ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = ErrorResponse.class)
+            @ApiResponse(code = 200, message = "Created", response = ErrorDTO.class),
+            @ApiResponse(code = 400, message = "Bad Request", response = ErrorDTO.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = ErrorDTO.class),
+            @ApiResponse(code = 403, message = "Forbidden", response = ErrorDTO.class),
+            @ApiResponse(code = 404, message = "Not Found", response = ErrorDTO.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = ErrorDTO.class)
     })
     @PostMapping("/schedules/{id}/voting-session")
     @ResponseStatus(HttpStatus.OK)
