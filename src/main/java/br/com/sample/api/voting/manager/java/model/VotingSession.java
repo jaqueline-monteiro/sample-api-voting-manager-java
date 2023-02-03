@@ -5,11 +5,11 @@ import java.time.OffsetDateTime;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
+@Builder
 @Api(value = "VotingSession", tags = "VotingSession")
 public class VotingSession implements Serializable {
     private static final long serialVersionUID = 510537799219257095L;
@@ -25,21 +25,4 @@ public class VotingSession implements Serializable {
 
     @ApiModelProperty(hidden = true)
     private Integer duration;
-
-    public VotingSession(Long id, OffsetDateTime startTime, OffsetDateTime endTime) {
-    }
-
-    public VotingSession updateWith(Integer duration) {
-        if (duration == null) {
-            duration = 1;
-        }
-
-        this.startTime = OffsetDateTime.now();
-        this.endTime = this.startTime.plusMinutes(duration);
-
-        return new VotingSession(
-                this.id,
-                this.startTime,
-                this.endTime);
-    }
 }

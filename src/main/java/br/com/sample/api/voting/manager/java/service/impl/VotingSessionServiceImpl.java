@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.sample.api.voting.manager.java.config.DurationConfigurer;
 import br.com.sample.api.voting.manager.java.exceptions.ResourceNotFoundException;
 import br.com.sample.api.voting.manager.java.model.Schedule;
 import br.com.sample.api.voting.manager.java.model.VotingSession;
@@ -20,16 +21,17 @@ public class VotingSessionServiceImpl implements IVotingSessionService {
 
     @Autowired
     private IVotingSessionRepository votingSessionRepository;
+    
+    @Autowired
+    private DurationConfigurer<Object> durationConfigurer;
 
     @Override
-    public void openVotingSession(Long scheduleId, Integer duration) {
-        VotingSession votingSession = new VotingSession();
-
+    public void openVotingSession(Long scheduleId, Long duration) {
         Optional<Schedule> schedule = Optional
                 .of(scheduleRepository.findById(scheduleId)
                         .orElseThrow(() -> new ResourceNotFoundException("Schedule not found")));
 
-        votingSession.updateWith(duration);
+        VotingSession votingSession = (VotingSession) durationConfigurer.updateDuration(duration);
 
         votingSessionRepository.save(schedule.get().getId(), votingSession);
     }

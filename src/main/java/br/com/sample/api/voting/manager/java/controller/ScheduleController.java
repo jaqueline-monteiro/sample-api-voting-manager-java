@@ -72,7 +72,7 @@ public class ScheduleController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> openVotingSession(
             @ApiParam(value = "Schedule ID to open a voting session", required = true) @PathVariable Long id,
-            @ApiParam(value = "Duration of the voting session", required = false) @RequestParam(required = false) Integer duration) {
+            @ApiParam(value = "Duration of the voting session", required = false) @RequestParam(required = false) Long duration) {
         votingSessionService.openVotingSession(id, duration);
 
         return new ResponseEntity<>("Voting session opened for schedule with id " + id, HttpStatus.OK);
