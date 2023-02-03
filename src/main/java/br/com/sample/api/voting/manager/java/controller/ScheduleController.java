@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/v1")
-@Api(value = "VoteController", tags = "VoteController", consumes = "application/json", produces = "application/json")
+@Api(value = "ScheduleController", tags = "ScheduleController", consumes = "application/json", produces = "application/json")
 public class ScheduleController {
 
     @Autowired

@@ -25,6 +25,7 @@ public class Schedule implements Serializable {
     private String description;
 
     public Schedule() {
+        
     }
 
     public Schedule(String title, String description) {
