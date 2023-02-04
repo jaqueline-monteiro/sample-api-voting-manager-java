@@ -1,10 +1,12 @@
 package br.com.sample.api.voting.manager.java.service.impl;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.sample.api.voting.manager.java.exceptions.ResourceExpiredException;
 import br.com.sample.api.voting.manager.java.exceptions.ResourceNotFoundException;
 import br.com.sample.api.voting.manager.java.model.Schedule;
 import br.com.sample.api.voting.manager.java.model.Vote;
@@ -16,7 +18,7 @@ import br.com.sample.api.voting.manager.java.service.IVoteService;
 
 @Service
 public class VoteServiceImpl implements IVoteService {
-    
+
     @Autowired
     private IScheduleRepository scheduleRepository;
 
@@ -28,15 +30,20 @@ public class VoteServiceImpl implements IVoteService {
 
     @Override
     public void vote(Long scheduleId, Long sessionId, Vote vote) {
-        Optional<Schedule> schedule = Optional
-                .of(scheduleRepository.findById(scheduleId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Schedule not found")));
-        
-        Optional<VotingSession> votingSession = Optional
-                .of(votingSessionRepository.findById(sessionId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Voting Session not found")));
+        @SuppressWarnings("unused")
+        Optional<Schedule> schedule = Optional.of(scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Schedule not found")));
 
-        // TODO verify if the session is still open to vote (check duration)
+        Optional<VotingSession> votingSession = Optional.of(votingSessionRepository.findById(sessionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Voting Session not found")));
+
+        votingSession.stream()
+                .filter(value -> value.getEndTime().isBefore(OffsetDateTime.now()))
+                .findAny()
+                .ifPresent(value -> {
+                    throw new ResourceExpiredException("Voting Session expired.");
+                });
+
         // TODO verify if CPF is able to vote (external integration)
         // TODO verify if member has already voted
 

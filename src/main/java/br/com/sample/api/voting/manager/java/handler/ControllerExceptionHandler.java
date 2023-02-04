@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import br.com.sample.api.voting.manager.java.exceptions.ResourceExpiredException;
 import br.com.sample.api.voting.manager.java.exceptions.ResourceNotFoundException;
 import br.com.sample.api.voting.manager.java.model.ErrorDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -31,19 +32,6 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(apiError.getStatus()).body(apiError);
     }
     
-    @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<ErrorDTO> handle(HttpServletRequest request, ResponseStatusException exception) {
-        log.error("Response Status Error", exception);
-
-        ErrorDTO apiError = ErrorDTO.builder()
-                .error("Response Status Error")
-                .message(exception.getMessage())
-                .status(exception.getStatus().value())
-                .build();
-
-        return ResponseEntity.status(apiError.getStatus()).body(apiError);
-    }
-
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorDTO> handle(Exception exception) {
         log.error("Internal Server Error", exception);
@@ -52,6 +40,19 @@ public class ControllerExceptionHandler {
                 .error("Internal Server Error")
                 .message(exception.getMessage())
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .build();
+
+        return ResponseEntity.status(apiError.getStatus()).body(apiError);
+    }
+    
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ErrorDTO> handle(HttpServletRequest request, ResponseStatusException exception) {
+        log.error("Response Status Error", exception);
+
+        ErrorDTO apiError = ErrorDTO.builder()
+                .error("Response Status Error")
+                .message(exception.getMessage())
+                .status(exception.getStatus().value())
                 .build();
 
         return ResponseEntity.status(apiError.getStatus()).body(apiError);
@@ -78,6 +79,19 @@ public class ControllerExceptionHandler {
                 .error("Resource Not Found")
                 .message(exception.getMessage())
                 .status(HttpStatus.NOT_FOUND.value())
+                .build();
+
+        return ResponseEntity.status(apiError.getStatus()).body(apiError);
+    }
+    
+    @ExceptionHandler(ResourceExpiredException.class)
+    public ResponseEntity<ErrorDTO> handle(ResourceExpiredException exception) {
+        log.error("Resource Expired", exception);
+        
+        ErrorDTO apiError = ErrorDTO.builder()
+                .error("Resource Expired")
+                .message(exception.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
                 .build();
 
         return ResponseEntity.status(apiError.getStatus()).body(apiError);
