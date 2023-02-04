@@ -67,7 +67,7 @@ public class ScheduleController {
 
     @ApiOperation(value = "Endpoint to open a voting session in a schedule")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Ok", response = ErrorDTO.class),
+            @ApiResponse(code = 201, message = "Created", response = ErrorDTO.class),
             @ApiResponse(code = 400, message = "Bad Request", response = ErrorDTO.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = ErrorDTO.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ErrorDTO.class),
@@ -91,7 +91,7 @@ public class ScheduleController {
     
     @ApiOperation(value = "Endpoint to receive votes from members")
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Created", response = ErrorDTO.class),
+            @ApiResponse(code = 200, message = "Ok", response = ErrorDTO.class),
             @ApiResponse(code = 400, message = "Bad Request", response = ErrorDTO.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = ErrorDTO.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ErrorDTO.class),
