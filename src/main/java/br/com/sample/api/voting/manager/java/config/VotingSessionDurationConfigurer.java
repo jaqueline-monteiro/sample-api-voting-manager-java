@@ -9,7 +9,7 @@ import br.com.sample.api.voting.manager.java.model.VotingSession;
 @Component
 public class VotingSessionDurationConfigurer implements DurationConfigurer<Object> {
     
-    public VotingSession applyDuration(Long duration) {
+    public VotingSession applyDuration(long duration) {
         OffsetDateTime startTime = OffsetDateTime.now();
 
         return VotingSession.builder()

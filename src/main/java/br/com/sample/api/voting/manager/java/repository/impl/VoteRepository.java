@@ -36,7 +36,7 @@ public class VoteRepository implements IVoteRepository {
         } catch (Exception exception) {
             log.error("Failed saving! {}", exception.getMessage());
 
-            throw new ApiException(exception, "Failed to persist vote to schedule with sessionId: %s", sessionId);
+            throw new ApiException(exception, "Failed to persist Vote to schedule with sessionId: %s", sessionId);
         }
     }
 }

@@ -36,9 +36,9 @@ public class VoteServiceImpl implements IVoteService {
                 .of(votingSessionRepository.findById(sessionId)
                         .orElseThrow(() -> new ResourceNotFoundException("Voting Session not found")));
 
+        // TODO verify if the session is still open to vote (check duration)
         // TODO verify if CPF is able to vote (external integration)
         // TODO verify if member has already voted
-        // TODO configurate a pattern for vote ('Sim'/'Não')
 
         voteRepository.vote(votingSession.get().getId(), vote);
     }

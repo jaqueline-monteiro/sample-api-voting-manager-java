@@ -7,6 +7,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import br.com.sample.api.voting.manager.java.exceptions.ApiException;
@@ -27,9 +29,11 @@ public class VotingSessionRepository implements IVotingSessionRepository {
     private static final String FIND_BY_ID = "SELECT ID,SCHEDULE_ID,START_TIME,END_TIME FROM VOTING_SYSTEM.VOTING_SESSION WHERE ID = :id";
 
     @Override
-    public void save(Long scheduleId, VotingSession votingSession) {
+    public VotingSession save(Long scheduleId, VotingSession votingSession) {
         try {
             log.info("Saving a Voting Session with scheduleId {}", scheduleId);
+            
+            KeyHolder keyHolder = new GeneratedKeyHolder();
 
             var parameters = new MapSqlParameterSource();
 
@@ -37,9 +41,17 @@ public class VotingSessionRepository implements IVotingSessionRepository {
             parameters.addValue("startTime", votingSession.getStartTime());
             parameters.addValue("endTime", votingSession.getEndTime());
 
-            jdbcOperations.update(INSERT, parameters);
+            jdbcOperations.update(INSERT, parameters, keyHolder);
 
             log.info("Done!");
+            
+            long key = Optional.ofNullable(keyHolder)
+                    .map(k -> k.getKey().longValue())
+                    .orElseThrow(() -> new NullPointerException("KeyHolder is null"));
+
+            votingSession.setId(key);
+
+            return votingSession;
         } catch (Exception exception) {
             log.error("Failed saving! {}", exception.getMessage());
             

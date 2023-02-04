@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Schedule implements Serializable {
     private static final long serialVersionUID = -7794951910698159678L;
 
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty(value = "Schedule identification number", required = false, example = "1234567890", hidden = true)
     private Long id;
 
     @NotBlank(message = "Field TITLE must not be null or blank.")

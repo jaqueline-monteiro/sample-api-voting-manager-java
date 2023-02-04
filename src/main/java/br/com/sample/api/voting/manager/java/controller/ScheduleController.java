@@ -19,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.sample.api.voting.manager.java.model.ErrorDTO;
 import br.com.sample.api.voting.manager.java.model.Schedule;
 import br.com.sample.api.voting.manager.java.model.Vote;
+import br.com.sample.api.voting.manager.java.model.VotingSession;
 import br.com.sample.api.voting.manager.java.service.IScheduleService;
 import br.com.sample.api.voting.manager.java.service.IVoteService;
 import br.com.sample.api.voting.manager.java.service.IVotingSessionService;
@@ -74,14 +75,18 @@ public class ScheduleController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = ErrorDTO.class)
     })
     @PostMapping("/schedules/{id}/voting-session")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> openVotingSession(
-            @ApiParam(value = "Schedule ID to open a voting session", required = true) @PathVariable Long id,
-            @ApiParam(value = "Duration of the voting session", required = false) @RequestParam(required = false) Long duration) { 
-        
-        votingSessionService.openVotingSession(id, duration);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<VotingSession> openVotingSession(
+            @ApiParam(value = "Schedule identification number", required = true) @PathVariable Long id,
+            @ApiParam(value = "Duration of the voting session in minutes", required = false, defaultValue = "1") @RequestParam(required = false) long duration) { 
+        VotingSession created = votingSessionService.openVotingSession(id, duration);
 
-        return new ResponseEntity<>("Voting session opened for schedule with id " + id, HttpStatus.OK);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/schedules/{id}/voting-session")
+                .buildAndExpand(created.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(created);
     }
     
     @ApiOperation(value = "Endpoint to receive votes from members")
@@ -93,16 +98,15 @@ public class ScheduleController {
             @ApiResponse(code = 404, message = "Not Found", response = ErrorDTO.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = ErrorDTO.class)
     })
-    @PostMapping("/schedules/{id}/voting-session/{id}/vote")
+    @PostMapping("schedules/{scheduleId}/voting-session/{sessionId}/vote")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> vote(
-            @ApiParam(value = "Schedule ID to open a voting session", required = true) @PathVariable Long scheduleId,
-            @ApiParam(value = "VotingSession ID to register a vote in a schedule", required = true) @PathVariable Long sessionId,
-            @ApiParam(value = "Member informations required to vote", required = false) @RequestBody(required = true) @Valid Vote vote) {
+            @ApiParam(value = "Schedule identification number", required = true) @PathVariable Long scheduleId,
+            @ApiParam(value = "Voting Session identification number", required = true) @PathVariable Long sessionId,
+            @RequestBody(required = true) @Valid Vote vote) {
         
         voteService.vote(scheduleId, sessionId, vote);
 
         return new ResponseEntity<>("Vote registered successfully!", HttpStatus.OK);
     }
-
 }

@@ -26,13 +26,13 @@ public class VotingSessionServiceImpl implements IVotingSessionService {
     private DurationConfigurer<Object> durationConfigurer;
 
     @Override
-    public void openVotingSession(Long scheduleId, Long duration) {
+    public VotingSession openVotingSession(Long scheduleId, long duration) {
         Optional<Schedule> schedule = Optional
                 .of(scheduleRepository.findById(scheduleId)
                         .orElseThrow(() -> new ResourceNotFoundException("Schedule not found")));
 
         VotingSession votingSession = (VotingSession) durationConfigurer.applyDuration(duration);
 
-        votingSessionRepository.save(schedule.get().getId(), votingSession);
+        return votingSessionRepository.save(schedule.get().getId(), votingSession);
     }
 }

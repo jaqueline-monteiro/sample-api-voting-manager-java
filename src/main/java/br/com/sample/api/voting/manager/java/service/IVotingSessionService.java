@@ -1,6 +1,8 @@
 package br.com.sample.api.voting.manager.java.service;
 
+import br.com.sample.api.voting.manager.java.model.VotingSession;
+
 public interface IVotingSessionService {
     
-    void openVotingSession(Long id, Long duration);
+    VotingSession openVotingSession(Long id, long duration);
 }

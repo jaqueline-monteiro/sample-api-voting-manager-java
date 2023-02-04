@@ -6,7 +6,7 @@ import br.com.sample.api.voting.manager.java.model.VotingSession;
 
 public interface IVotingSessionRepository {
     
-    void save(Long scheduleId, VotingSession votingSession);
+    VotingSession save(Long scheduleId, VotingSession votingSession);
 
     Optional<VotingSession> findById(Long id);
 }
