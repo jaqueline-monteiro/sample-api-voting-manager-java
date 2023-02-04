@@ -21,7 +21,7 @@ public class VoteRepository implements IVoteRepository {
             + "VALUES (VOTING_SYSTEM.VOTE_SEQ.NEXTVAL,:sessionId,VOTING_SYSTEM.MEMBER_ID_SEQ.NEXTVAL,:vote)";
 
     @Override
-    public void vote(Long sessionId, Vote vote) {
+    public void save(Long sessionId, Vote vote) {
         try {
             log.info("Saving Vote to schedule with sessionId: {}", sessionId);
 

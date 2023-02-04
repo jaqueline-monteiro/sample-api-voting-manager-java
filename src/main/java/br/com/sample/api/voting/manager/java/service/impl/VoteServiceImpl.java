@@ -11,42 +11,54 @@ import br.com.sample.api.voting.manager.java.exceptions.ResourceNotFoundExceptio
 import br.com.sample.api.voting.manager.java.model.Schedule;
 import br.com.sample.api.voting.manager.java.model.Vote;
 import br.com.sample.api.voting.manager.java.model.VotingSession;
-import br.com.sample.api.voting.manager.java.repository.IScheduleRepository;
 import br.com.sample.api.voting.manager.java.repository.IVoteRepository;
-import br.com.sample.api.voting.manager.java.repository.IVotingSessionRepository;
+import br.com.sample.api.voting.manager.java.service.IScheduleService;
 import br.com.sample.api.voting.manager.java.service.IVoteService;
+import br.com.sample.api.voting.manager.java.service.IVotingSessionService;
 
 @Service
 public class VoteServiceImpl implements IVoteService {
 
     @Autowired
-    private IScheduleRepository scheduleRepository;
+    private IScheduleService scheduleService;
 
     @Autowired
-    private IVotingSessionRepository votingSessionRepository;
+    private IVotingSessionService votingSessionService;
 
     @Autowired
     private IVoteRepository voteRepository;
 
     @Override
     public void vote(Long scheduleId, Long sessionId, Vote vote) {
-        @SuppressWarnings("unused")
-        Optional<Schedule> schedule = Optional.of(scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new ResourceNotFoundException("Schedule not found")));
+        findScheduleById(scheduleId);
 
-        Optional<VotingSession> votingSession = Optional.of(votingSessionRepository.findById(sessionId)
+        Optional<VotingSession> votingSession = findVotingSessionById(sessionId);
+
+        isVotingSessionExpired(votingSession);
+
+        // TODO verify if member's cpf is able to vote
+        // TODO verify if member has already voted
+
+        voteRepository.save(votingSession.get().getId(), vote);
+    }
+
+    private Optional<VotingSession> findVotingSessionById(Long sessionId) {
+        return Optional.of(votingSessionService.findById(sessionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Voting Session not found")));
+    }
 
+    private void findScheduleById(Long scheduleId) {
+        @SuppressWarnings("unused")
+        Optional<Schedule> schedule = Optional.of(scheduleService.findById(scheduleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Schedule not found")));
+    }
+
+    private void isVotingSessionExpired(Optional<VotingSession> votingSession) {
         votingSession.stream()
                 .filter(value -> value.getEndTime().isBefore(OffsetDateTime.now()))
                 .findAny()
                 .ifPresent(value -> {
                     throw new ResourceExpiredException("Voting Session expired.");
                 });
-
-        // TODO verify if CPF is able to vote (external integration)
-        // TODO verify if member has already voted
-
-        voteRepository.vote(votingSession.get().getId(), vote);
     }
 }

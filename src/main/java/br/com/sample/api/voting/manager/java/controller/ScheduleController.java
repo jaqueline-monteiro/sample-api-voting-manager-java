@@ -74,7 +74,7 @@ public class ScheduleController {
             @ApiResponse(code = 404, message = "Not Found", response = ErrorDTO.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = ErrorDTO.class)
     })
-    @PostMapping("/schedules/{id}/voting-session")
+    @PostMapping("/schedules/{id}/sessions")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<VotingSession> openVotingSession(
             @ApiParam(value = "Schedule identification number", required = true) @PathVariable Long id,
@@ -98,9 +98,9 @@ public class ScheduleController {
             @ApiResponse(code = 404, message = "Not Found", response = ErrorDTO.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = ErrorDTO.class)
     })
-    @PostMapping("schedules/{scheduleId}/voting-session/{sessionId}/vote")
+    @PostMapping("schedules/{scheduleId}/sessions/{sessionId}/votes")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> vote(
+    public ResponseEntity<String> registerVote(
             @ApiParam(value = "Schedule identification number", required = true) @PathVariable Long scheduleId,
             @ApiParam(value = "Voting Session identification number", required = true) @PathVariable Long sessionId,
             @RequestBody(required = true) @Valid Vote vote) {
