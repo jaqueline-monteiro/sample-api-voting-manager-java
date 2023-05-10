@@ -1,10 +1,10 @@
 pipeline {
-    agent none
+    agent any
 
     stages {
         stage('Build') {
             agent {
-              docker { image 'maven' }
+                docker { image 'maven' }
             }
             steps {
                 echo 'Building the application...'
