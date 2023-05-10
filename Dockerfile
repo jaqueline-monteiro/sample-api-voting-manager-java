@@ -1,4 +1,5 @@
-FROM eclipse-temurin:18-alpine
+FROM maven:3.8.3-openjdk-11
 
-ADD target/*.jar /opt/app.jar
-CMD ["java", "-jar", "/opt/app.jar"]
+COPY . /app
+WORKDIR /app
+
