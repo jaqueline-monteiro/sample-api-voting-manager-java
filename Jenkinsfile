@@ -1,11 +1,10 @@
 pipeline {
     agent any
     
-    tools {
-        maven 'Maven'
-        jdk 'JDK'
+    environment {
+        POM_VERSION = ""
     }
-    
+
     stages {
         stage('Build') {
             agent {
@@ -13,7 +12,12 @@ pipeline {
             }
             steps {
                 echo 'Building the application...'
-                sh 'mvn -B -DskipTests clean install'
+                sh 'mvn package -Dmaven.test.skip=true'
+                script {
+                    pom = readMavenPom file: 'pom.xml'
+                    POM_VERSION = pom.version
+                }
+                stash 'source'
             }
         }
         stage('Test') {
