@@ -1,6 +1,11 @@
 pipeline {
     agent any
     
+    tools {
+        maven 'Maven'
+        jdk 'JDK'
+    }
+    
     stages {
         stage('Build') {
             agent {
@@ -8,7 +13,7 @@ pipeline {
             }
             steps {
                 echo 'Building the application...'
-                sh "mvn package -Dmaven.test.skip=true"
+                sh 'mvn -B -DskipTests clean install'
             }
         }
         stage('Test') {
