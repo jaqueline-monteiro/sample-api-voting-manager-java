@@ -8,17 +8,15 @@ pipeline {
     stages {
         stage('Build') {
             agent {
-                 dockerfile {
-                    filename 'Dockerfile'
-                }
+                docker { image 'maven:3.8.1-openjdk-11' }
             }
             steps {
                 sh "mvn package -Dmaven.test.skip=true"
                 script {
                     pom = readMavenPom file: 'pom.xml'
-                    POM_VERSION = pom.version
+                    env.POM_VERSION = pom.version
                 }
-                stash 'source'
+                stash includes: '**/*', name: 'source'
             }
         }
 
