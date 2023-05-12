@@ -6,11 +6,9 @@ RUN apt-get update && \
     apt-get install -y openjdk-17-jdk && \
     rm -rf /var/lib/apt/lists/*
 
-#macos
-#ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-arm64
+RUN JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
 
-#windows
-ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
+ENV JAVA_HOME $JAVA_HOME
 
 ENV PATH ${JAVA_HOME}/bin:${PATH}
 
