@@ -13,12 +13,12 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>sample-api-voting-manager-java</name>
-	<description>Spring Boot REST API responsible for managing voting sessions</description>
+	<description>Spring Boot REST API responsible for managing voting sessions.</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>11</java.version>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
+		<java.version>17</java.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<io.springfox.version>2.9.2</io.springfox.version>
 	</properties>

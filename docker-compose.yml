@@ -1,8 +1,7 @@
 version: '3'
 services:
   jenkins:
-    image: jenkins/jenkins:lts-jdk11
-    #image: jenkins/jenkins:2.263.4
+    image: jenkinsci/blueocean
     ports:
       - '8084:8080'
     volumes:
